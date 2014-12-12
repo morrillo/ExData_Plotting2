@@ -12,5 +12,5 @@ result <- aggregate(as.numeric(data_merge$Emissions),by=list(data_merge$year,dat
 colnames(result)<-c('year','SCC','emissions')
 
 data_result<-data.frame(result)
-ggplot(data=data_result, aes(x=year, y=emissions,fill=SCC,colour=SCC))+geom_line()+geom_point()
-
+c<-ggplot(data=data_result,aes(x=year,y=emissions,fill=SCC,colour=SCC))
+c + geom_line() + geom_point()
