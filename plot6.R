@@ -14,5 +14,7 @@ result <- aggregate(as.numeric(data_merge$Emissions),by=list(data_merge$year,dat
 colnames(result)<-c('year','city','emissions')
 
 data_result<-data.frame(result)
-c<-ggplot(data=data_result,aes(x=year,y=emissions,fill=city,colour=city))
-c + geom_bar(stat="identity")
+cities = data.frame(c('24510','06037'),c('Baltimore','Los Angeles County'))
+colnames(cities) <- c('city','city_name')
+data_merge <- merge(data_result,cities,by="city")
+c<-ggplot(data=data_merge,aes(x=as.factor(year),y=emissions,fill=city_name,colour=city_name))+geom_bar(stat="identity",position=position_dodge())+xlab("Year")+ylab("Emissions")
