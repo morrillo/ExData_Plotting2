@@ -11,12 +11,15 @@ filtered_scc <- filter_scc[grep("External Combustion",filter_scc$SCC.Level.One,i
 # Merges Baltimore and classificaton table for external combustion emissions
 data_merge <- merge(subsetBaltimore,filtered_scc,by="SCC")
 # Aggregates results in data frame
-result <- aggregate(as.numeric(data_merge$Emissions),by=list(data_merge$year,data_merge$Short.Name),FUN=sum)
-colnames(result)<-c('year','SCC','emissions')
+# result <- aggregate(as.numeric(data_merge$Emissions),by=list(data_merge$year,data_merge$Short.Name),FUN=sum)
+result <- aggregate(as.numeric(data_merge$Emissions),by=list(data_merge$year),FUN=sum)
+# colnames(result)<-c('year','SCC','emissions')
+colnames(result)<-c('year','emissions')
 data_result<-data.frame(result)
 
 # plots data
 png('plot5.png')
-c<-ggplot(data=data_result,aes(x=year,y=emissions,fill=SCC,colour=SCC))+geom_line()+geom_point()
+# c<-ggplot(data=data_result,aes(x=as.factor(year),y=emissions))+geom_line()+geom_point()+xlab("Year")+ylab("Emissions")
+c<-ggplot(data=data_result,aes(x=as.factor(year),y=emissions))+geom_bar(stat="identity")+xlab("Year")+ylab("Emissions")+labs(title="Motor vehicle emissions for Baltimore City")
 print(c)
 dev.off()
