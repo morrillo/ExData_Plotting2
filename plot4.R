@@ -12,8 +12,14 @@ result <- aggregate(as.numeric(subsetBaltimore$Emissions),by=list(subsetBaltimor
 colnames(result)<-c('year','SCC','emissions')
 data_result<-data.frame(result)
 
+# Merges Baltimore and classificaton table for external combustion emissions
+filter_scc <- SCC[,c('SCC','Short.Name')]
+filtered_scc <- filter_scc[grep("Coal",filter_scc$Short.Name,ignore.case=T),]
+data_merge <- merge(data_result,filtered_scc,by="SCC")
+colnames(data_merge) <- c('SCC','year','emissions','Short.Name')
+
 # Plots data
-png('plot4.png')
-c <- ggplot(data=data_result, aes(x=year, y=emissions,fill=SCC,colour=SCC))+geom_line()+geom_point()
+png('plot4.png',width=960,height=960)
+c <- ggplot(data=data_merge, aes(x=as.factor(year), y=emissions,fill=as.factor(Short.Name),colour=as.factor(Short.Name)))+geom_bar(stat="identity")+xlab("Year")+ylab("Emissions")+labs(title="Emissions from coal related sources in USA")
 print(c)
 dev.off()
